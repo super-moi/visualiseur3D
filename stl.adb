@@ -64,7 +64,7 @@ package body STL is
       -- On compte les facettes en trouvant les "endloop"
       while not(End_Of_File(F)) loop
 	 Ligne := U(Get_Line(F));
-	 if In_String(Enleve_Espaces(Ligne), "end loop") then --on vire les espaces en préfixe pour accélérer la recherche
+	 if In_String(Enleve_Espaces(Ligne), "endloop") then --on vire les espaces en préfixe pour accélérer la recherche
 	    Nb := Nb +1;
 	 end if;
       end loop;
@@ -153,13 +153,19 @@ package body STL is
       F : File_Type;
       
       --Utilisation d'une machine à état
-      type Etat_Lecture_STL is (Facette_Debut, -- A lu Facet normal
-		    Facette_Fin, --A Lu le end_loop et end facet
-		    Lu_Premier_Vect, -- A lu et enregistré le premier Vect 
-		    Lu_Deuxieme_Vect, -- Lu et enregistré le 2ème vect
-		    Lu_Troiseme_Vect); -- Lu et enregisté le 3ème vect
+      type Etat_Lecture_STL is (Hors_Solide, -- Etat du début, avant de lire "solid"
+				Dans_Solide, --Une fois avoir lu la balise "solid"
+				Fin_Solide, -- après avoir lu endsolid
+				Dans_Facette, -- A lu Facet normal, se trouve dans une facette
+				Dans_Boucle); -- Après avoir lu "outer loop"
       
-      EtatCourant : Etat_Lecture_STL := Facette_Debut;
+      -- Variables servants à la gestion du parsage du fichier ligne par ligne          
+      EtatCourant : Etat_Lecture_STL := Hors_Solide;
+      -- Le vecteur entrain d'être lu sur une facette
+      Vecteur_Courant : Natural := 1;
+      Facette_Courante : Natural := 1;
+      Ligne := Ustring;
+      Facette_Tampon := Facette;
    begin
       
       Nb_Facettes := Nombre_Facettes(Nom_Fichier);
@@ -169,9 +175,44 @@ package body STL is
       -- on ouvre de nouveau le fichier pour parcourir les facettes et remplir le maillage
       Open(File => F, Mode => In_File, Name => Nom_Fichier);
       
-      --On parse le fichier pour récupérer les vecteurs, puis les facettes.
+      --On parse le fichier pour récupérer les vecteurs, puis les facettes, à l'aide d'une machine à état
       while not(End_Of_File(F)) loop
-	if 
+	 Ligne := U(Get_Line(F)); -- on lit une ligne du fichier
+	 
+	 case EtatCourant is
+	    
+	    when Hors_Solide =>
+	       if In_String(Enleve_Espaces(Ligne), "solid") and not(In_String(Enleve_Espaces(Ligne), "endsolid")) then
+		  EtatCourant := Dans_Figure;
+	       end if;
+	       
+	    when Dans_Solide =>
+	       if In_String(Enleve_Espaces(Ligne), "facet normal") then
+		  EtatCourant := Dans_Facette;
+	       elsif In_String(Enleve_Espaces(Ligne), "endsolid") then
+		  EtatCourant := Hors_Solide;
+	       end if;
+	       
+	    when Dans_Facette =>
+	       if In_String(Enleve_Espaces(Ligne), "outer loop") then
+		  EtatCourant := Dans_Boucle;
+	       elsif In_String(Enleve_Espaces(Ligne), "endfacet") then
+		  EtatCourant := Dans_Solide;
+	       end if;
+	       
+	    when Dans_Boucle =>
+	       if In_String(Enleve_Espaces(Ligne), "vertex") then
+		  Facette_Tampon(Vecteur Courant) := Chaine_Vers_Vecteur(Ligne);
+		  Vecteur_Courant := Vecteur_Courant + 1;
+	       elsif In_String(Enleve_Espaces(Ligne), "endloop") then
+		  Vecteur_Courant := 1; --on remet le compteur à 0
+		  M.all(Facette_Courante) := Facette_Tampon; --On copie la facette courante dans le maillage à retourner
+		  Facette_Courante := Facette_Courante + 1; -- On incrémente la facette courante pour la prochaine
+		  EtatCourant := Dans_Facette; --on sort de la boucle
+	       end if;
+	       	       
+	 end case;
+	      
       end loop;
       
       Close (F); --fermeture du fichier
