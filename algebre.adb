@@ -64,8 +64,8 @@ package body Algebre is
       B:="*"(T,B);
       
       --3)
-      Resultat(1):= (C(3) / B(3)) * B(1) - C(1);
-      Resultat(2):= (C(3) / B(3))* B(2) - C(2);
+      Resultat(1):= (E(3) / B(3)) * B(1) - E(1);
+      Resultat(2):= (E(3) / B(3))* B(2) - E(2);
       
       return Resultat;
    end;
