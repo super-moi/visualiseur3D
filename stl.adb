@@ -81,19 +81,20 @@ package body STL is
       function Parser_Vecteur(Ligne : in Ustring) return Vecteur is
 	 
 	 -- Transforme une chaine en nombre dépendent du type du nombre
-	 -- ACHTUNG! Fonction récursive!
 	 function Chaine_Vers_Float(Chaine_Nombre: in String) return Float is
-	    
+
 	 begin
-	    if Dans_Chaine(Chaine_Nombre, "e") then 
+	    Put("Okay Ici");
+	    
+	    if Dans_Chaine(U(Chaine_Nombre), "e") then 
 	       -- si flottant format scientifique
-	       if Chaine_Nombre(Chaine'Length - 2) = '+' then
-		  return Float'Value(Chaine_Nombre(1,Chaine'Length - 4)) * (10**Integer'Value(Chaine-Length - 2, Chaine'Length));
+	       if Chaine_Nombre(Chaine_Nombre'Length - 2) = '+' then
+		  return Float'Value(Chaine_Nombre(1..Chaine_Nombre'Length - 4)) * Float(10**Integer'Value(Chaine_Nombre(Chaine_Nombre'Length - 2..Chaine_Nombre'Length)));
 	       else
-		    return
+		  return Float'Value(Chaine_Nombre(1..Chaine_Nombre'Length - 4)) * Float(10**( - Integer'Value(Chaine_Nombre(Chaine_Nombre'Length - 2..Chaine_Nombre'Length))));
 	       end if;
 	    else
-	       --entier ou chaine
+	       --entier ou float normal 
 	       return Float'Value(Chaine_Nombre); --conversion en float
 	    end if;
 	    
@@ -102,44 +103,58 @@ package body STL is
 	 
 	 type Etat is (Hors_Nombre, Dans_Nombre) ;
 	 
+	 procedure Trace(E:Etat) is
+	 begin
+	    Put_Line("#TRACE ETAT:" & Etat'Image(E)) ; 
+	 end ;
+	 
 	 Chaine_Tampon : Ustring;
 	 EtatCour : Etat := Hors_Nombre;
-	     --indique le point courant au fur et a mesure de la lecture
+	 --indique le point courant au fur et a mesure de la lecture
 	 Pt_Courant : Natural := 1; 
-	     type Bornes_Point is record
-		Debut, Fin : Natural;
-	     end record;
-	     --indique les bornes de l'écriture des pts dans la chaine
+	 type Bornes_Point is record
+	    Debut, Fin : Natural;
+	 end record;
+	 
+	 --indique les bornes de l'écriture des pts dans la chaine
 	 Pt_Bornes: array(1..3) of Bornes_Point; 
-	     
 	     
 	 Vecteur_Reponse : Vecteur(1..3);
 	 
       begin
 	 -- On enlève les espaces et le mot "vertex
 	 Chaine_Tampon := Enleve_Espaces(Ligne);
-	 Chaine_Tampon := U(Slice(Chaine,6,Length(Chaine_Tampon)));
+	 Chaine_Tampon := U(Slice(Chaine_Tampon,7,Length(Chaine_Tampon)));
 	 Chaine_Tampon := Enleve_Espaces(Chaine_Tampon);
 	 
+	 Put_Line(Chaine_Tampon);
+	 
 	 for I in 1..(Length(Chaine_Tampon)) loop
+	    Put(Pt_Courant);
+	    Put(Element(Chaine_Tampon,I));
+	    Trace(EtatCour);
+	    
 	    if Element(Chaine_Tampon, I) = ' ' then
-	       if EtatCour := Dans_Nombre then
+	       if EtatCour = Dans_Nombre then
 		  Pt_Bornes(Pt_Courant).Fin := I - 1;
 		  EtatCour := Hors_Nombre;
 		  Pt_Courant := Pt_Courant + 1;
 	       end if;
-	    else
-	       if EtatCour := Hors_Nombre then
+	    else --caractère normal (chiffre, lettre)
+	       if EtatCour = Hors_Nombre then
 		  Pt_Bornes(Pt_Courant).Debut := I;
 		  EtatCour := Dans_Nombre;
 	       end if;
 	    end if;
 	 end loop;
 	 
+	 -- Petite réparation qui répare l'éventualité où un chiffre est le dernier carac de la chaine
+	 if Pt_Bornes(3).Fin = 0 then
+	    Pt_Bornes(3).Fin := Length(Chaine_Tampon);
+	 end if;
+	 
 	 for I in 1..3 loop
-	    --Optimisation possible en supprimant Pt_Chaines
-	    Pt_Chaines(I) := Slice(Chaine_Tampon, Pt_Bornes(I).Debut, Pt_Bornes(I).Fin);
-	    Vecteur_Reponse(I) := Chaine_Vers_Float(Pt_Chaines(I));
+	    Vecteur_Reponse(I) := Chaine_Vers_Float(Slice(Chaine_Tampon, Pt_Bornes(I).Debut, Pt_Bornes(I).Fin));
 	 end loop;
 	 
 	 return Vecteur_Reponse;
