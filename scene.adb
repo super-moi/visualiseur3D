@@ -37,6 +37,7 @@ package body Scene is
 
 	procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur) is
 	begin
+	   
 	   -- index_facette designe la facette selectionnee
 	   P1 := Projection(M(Index_Facette).P1, Position_Camera, Centre_Repere , Matrice_Rotation); 
 	   P2 := Projection(M(Index_Facette).P2, Position_Camera, Centre_Repere , Matrice_Rotation); 
