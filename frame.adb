@@ -20,7 +20,7 @@ package body Frame is
 	   --affichage
 	   for J in M'Range loop
 	      for I in 1..3 loop
-		 Trace_Pixel(M(J)i);
+		 Trace_Pixel(M(J).i);
 	      end loop;
 	   end loop;	   
 	end;
