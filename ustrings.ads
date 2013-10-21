@@ -52,6 +52,7 @@ package Ustrings is
 
   procedure Put_Line(File : in File_Type; Item : in Unbounded_String);
   procedure Put_Line(Item : in Unbounded_String);
+  procedure Put_Line(Item : in String);
 
 end Ustrings;
 
