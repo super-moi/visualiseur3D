@@ -35,7 +35,7 @@ package body Scene is
 	begin
 	   -- index_facette designe la facette selectionnee
 	   for J in 1..3 loop --on doit projeter les 3 vecteurs
-	      Projection( M (Index_Facette, J), Position_Camera, Centre_Repere , Matrice_Rotation); -- cf algebre pr detailles sur la fonction
+	      Projection( Index_Facette(J), Position_Camera, Centre_Repere , Matrice_Rotation); -- cf algebre pr detailles sur la fonction
 	   end loop;
 	     
 	end;
@@ -47,9 +47,10 @@ package body Scene is
 	  
 	 
 	      -- visiblement c'est deja ds la fonction chargement ascii ds le fichier stl
-	      -- dans le fichier visualiseur,  cette fonction utilise chargement_ASCII
+	      -- dans le fichier visualiseur,  cette fonction utilise chargement_ASCII        
 	      --?
-	     	   
+	   
+	   Chargement_ASCII(M);    	   
 	   
 	   null;
 	end;
