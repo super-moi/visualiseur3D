@@ -19,8 +19,11 @@ package body Scene is
 
 	procedure Modification_Matrice_Rotation is
 	begin
+	   
 	   T := Matrice_Rotations ((1 => -Rho, 2 => -Theta, 3 => -Phi));
+	   
 	end Modification_Matrice_Rotation;
+	
 
 	function Position_Camera return Vecteur is
 		Position : Vecteur(1..3);
@@ -30,38 +33,34 @@ package body Scene is
 	   
 	   return Position;
 	end;
+	
 
 	procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur) is
 	begin
 	   -- index_facette designe la facette selectionnee
-	   for J in 1..3 loop --on doit projeter les 3 vecteurs
-	      Projection( Index_Facette(J), Position_Camera, Centre_Repere , Matrice_Rotation); -- cf algebre pr detailles sur la fonction
-	   end loop;
-	     
-	end;
-
-	procedure Ajout_Maillage(M : Maillage) is
-	begin
-	   -- a faire
-	   -- faire de maillage un tableau avec toutes les facettes
-	  
-	 
-	      -- visiblement c'est deja ds la fonction chargement ascii ds le fichier stl
-	      -- dans le fichier visualiseur,  cette fonction utilise chargement_ASCII        
-	      --?
+	   P1 := Projection(M(Index_Facette).P1, Position_Camera, Centre_Repere , Matrice_Rotation); 
+	   P2 := Projection(M(Index_Facette).P2, Position_Camera, Centre_Repere , Matrice_Rotation); 
+	   P3 := Projection(M(Index_Facette).P3, Position_Camera, Centre_Repere , Matrice_Rotation); 
 	   
-	   Chargement_ASCII(M);    	   
+	end Projection_Facette;
+	
+	
+	procedure Ajout_Maillage(M_Param : Maillage) is
+	begin
+	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.
+	   -- Pour l'instant je copie TOUT le contenu du tableau, pas juste le pointeur. On verra ce que ca donne dans le reste, sinon on fait
+	   -- M := M_Param
+	  	 	      	   
+	   M.all := M_Param.all;    	   
 	   
 	   null;
 	end;
 
 	function Nombre_De_Facettes return Natural is
-		N : Natural;
 	begin
-	   -- a faire --fait
-	   N:= Maillage'Length;
-	   return N;
+	   return Maillage'Length;
 	end;
+	
 	
 	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
 	begin
@@ -73,13 +72,15 @@ package body Scene is
 	   -- pb: rotation du repere de l'ordi ou de l'image???
 	   -- on va dire ds l'ordi
 	   
-	   if Index=3 then Phi:= Phi + Increment; --en radian	       
-	   elsif Index=2 then Rho:= Rho + Increment;	      
-	   elsif Index=4 then  R:= R + Increment;    
-	   else null;
+	   if Index=3 then 
+	      Phi:= Phi + Increment; --en radian	       
+	   elsif Index=2 then
+	      Rho:= Rho + Increment;	      
+	   elsif Index=4 then 
+	      R:= R + Increment;    
 	   end if;
-	   	   
-	end;
+	   
+	end Modification_Coordonnee_Camera;
 
 begin
    --initialisation de la matrice de rotation au lancement du programme  
