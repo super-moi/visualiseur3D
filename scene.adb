@@ -63,16 +63,11 @@ package body Scene is
 	
 	
 	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
-	begin
-	   -- a faire
-	   -- index = 2, 3 ou 4
-	   -- '3' pr tourner autour l'axe z
-	   -- '2' pr tourner autour l'axe x
-	   -- '4' pr le zoom
-	   -- pb: rotation du repere de l'ordi ou de l'image???
-	   -- on va dire ds l'ordi
-	   
-	   if Index=3 then 
+	begin	 
+	   -- index designe l'action voulu sur la camera
+	   if Index=1 then 
+	      R:=R + Increment;   
+	   elsif Index=3 then 
 	      Phi:= Phi + Increment; --en radian	       
 	   elsif Index=2 then
 	      Rho:= Rho + Increment;	      
