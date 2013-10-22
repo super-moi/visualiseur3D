@@ -31,7 +31,7 @@ package body Scene is
 	   -- a faire
 	   -- ? au depart, point camera en (0,0,-R) (R>0)
 	   Position := (0.0, 0.0, -R);
-	   Position := Position * Matrice_Rotations(Rho, Theta, Phi);
+	   Position := "*"( T, Position);
 	   
 	   return Position;
 	end;
