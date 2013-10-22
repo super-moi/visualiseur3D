@@ -23,7 +23,7 @@ package Scene is
 	-- quelques procedures permettant de mettre a jour les objets :
 
 	-- ajout du maillage dans le systeme (un seul maillage stocke)
-	procedure Ajout_Maillage(M : Maillage);
+	procedure Ajout_Maillage(Maillage_Param : Maillage);
 
 	-- mise a jour des coordonnees de la camera
 	-- l'Index indique le numero de la coordonnee a modifier

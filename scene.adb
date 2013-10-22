@@ -39,27 +39,26 @@ package body Scene is
 	begin
 	   
 	   -- index_facette designe la facette selectionnee
-	   P1 := Projection(M(Index_Facette).P1, Position_Camera, Centre_Repere , Matrice_Rotation); 
-	   P2 := Projection(M(Index_Facette).P2, Position_Camera, Centre_Repere , Matrice_Rotation); 
-	   P3 := Projection(M(Index_Facette).P3, Position_Camera, Centre_Repere , Matrice_Rotation); 
+	   P1 := Projection(M(Index_Facette).P1, Position_Camera, E, T); 
+	   P2 := Projection(M(Index_Facette).P2, Position_Camera, E , T); 
+	   P3 := Projection(M(Index_Facette).P3, Position_Camera, E , T); 
 	   
 	end Projection_Facette;
 	
 	
-	procedure Ajout_Maillage(M_Param : Maillage) is
+	procedure Ajout_Maillage(Maillage_Param : Maillage) is
 	begin
 	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.
 	   -- Pour l'instant je copie TOUT le contenu du tableau, pas juste le pointeur. On verra ce que ca donne dans le reste, sinon on fait
 	   -- M := M_Param
 	  	 	      	   
-	   M.all := M_Param.all;    	   
+	   M.all := Maillage_Param.all;    	   
 	   
-	   null;
 	end;
 
 	function Nombre_De_Facettes return Natural is
 	begin
-	   return Maillage'Length;
+	   return M'Length;
 	end;
 	
 	
