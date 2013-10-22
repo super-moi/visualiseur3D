@@ -30,6 +30,8 @@ package body Scene is
 	begin
 	   -- a faire
 	   -- ? au depart, point camera en (0,0,-R) (R>0)
+	   Position := (0,0,-R);
+	   Position := Position * Matrice_Rotation(Tho, Theta, Phi);
 	   
 	   return Position;
 	end;
@@ -76,6 +78,11 @@ package body Scene is
 	   end if;
 	   
 	end Modification_Coordonnee_Camera;
+	
+	function Renvoi_Maillage return Maillage is
+	begin
+	   return M;
+	end;
 
 begin
    --initialisation de la matrice de rotation au lancement du programme  
