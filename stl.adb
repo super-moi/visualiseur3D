@@ -14,91 +14,128 @@ package body STL is
    function Enleve_Espaces(Chaine : in Ustring) return Ustring is
       
       Nb_Espaces : Integer := 0;
-      with Ada.Numerics.Elementary_Functions;
-use Ada.Numerics.Elementary_Functions;
-with Ada.Text_IO;
-use Ada.Text_IO;
-
-
-
-package body Scene is
-
-	R : Float := 50.0; -- coordonnee Z initiale de la camera
-	Rho : Float := 0.0; -- rotation autour de X
-	Theta : Float := 0.0; -- rotation autour de Y
-	Phi : Float := 0.0; -- rotation autour de Z
-
-	E : Vecteur(1..3) := (-400.0, -300.0, 400.0); -- position du spectateur
-	T : Matrice(1..3, 1..3); -- matrice de rotation
-
-	M : Maillage;
-
-	procedure Modification_Matrice_Rotation is
-	begin
-	   
-	   T := Matrice_Rotations ((1 => -Rho, 2 => -Theta, 3 => -Phi));
-	   
-	end Modification_Matrice_Rotation;
-	
-
-	function Position_Camera return Vecteur is
-		Position : Vecteur(1..3);
-	begin
-	   -- a faire
-	   -- ? au depart, point camera en (0,0,-R) (R>0)
-	   
-	   return Position;
-	end;
-	
-
-	procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur) is
-	begin
-	   
-	   -- index_facette designe la facette selectionnee
-	   P1 := Projection(M(Index_Facette).P1, Position_Camera, Centre_Repere , Matrice_Rotation); 
-	   P2 := Projection(M(Index_Facette).P2, Position_Camera, Centre_Repere , Matrice_Rotation); 
-	   P3 := Projection(M(Index_Facette).P3, Position_Camera, Centre_Repere , Matrice_Rotation); 
-	   
-	end Projection_Facette;
-	
-	
-	procedure Ajout_Maillage(M_Param : Maillage) is
-	begin
-	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.
-	   -- Pour l'instant je copie TOUT le contenu du tableau, pas juste le pointeur. On verra ce que ca donne dans le reste, sinon on fait
-	   -- M := M_Param
-	  	 	      	   
-	   M.all := M_Param.all;    	   
-	   
-	   null;
-	end;
-
-	function Nombre_De_Facettes return Natural is
-	begin
-	   return Maillage'Length;
-	end;
-	
-	
-	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
-	begin	 
-	   -- index designe l'action voulu sur la camera
-	   if Index=1 then 
-	      R:=R + Increment;   
-	   elsif Index=3 then 
-	      Phi:= Phi + Increment; --en radian	       
-	   elsif Index=2 then
-	      Rho:= Rho + Increment;	      
-	   elsif Index=4 then 
-	      R:= R + Increment;    
-	   end if;
-	   
-	end Modification_Coordonnee_Camera;
-
-begin
-   --initialisation de la matrice de rotation au lancement du programme  
-   Modification_Matrice_Rotation;
-end;
-
+      
+   begin
+      
+      -- On compte le nombre d'espaces en préfixe
+      for I in 1..(Length(Chaine)) loop
+	 if Element(Chaine,I) = ' ' then
+	    Nb_Espaces := Nb_Espaces + 1;
+	 else
+	    exit;
+	 end if;
+      end loop;
+      
+      -- Puis on retourne la tranche qui ne contient plus les espaces
+      return U(Slice(Chaine, Nb_Espaces + 1, Length(Chaine)));
+      
+   end;
+   
+   
+   -- Indique par un booléen si une chaine Motif est contenue dans Chaine_Recherche
+   function Dans_Chaine(Chaine_Recherche: in Ustring; Motif: in String ) return Boolean is
+      
+      Reponse : Boolean := False;
+      
+   begin
+      
+      -- On coupe la chaine de recherche sur un intervalle de la longueur du motif, et on regarde si cette "tranche" correspond au motif.
+      for I in 1..(Length(Chaine_Recherche) - Motif'Length + 1) loop
+	 if Slice(Chaine_Recherche, I, Motif'Length + I - 1) = Motif then
+	    Reponse := True;
+	    exit;
+	 end if;
+      end loop;
+      
+      return Reponse;
+      
+   end;
+   
+   function Nombre_Facettes(Nom_Fichier : String) return Natural is
+      
+      Ligne : UString; -- chaine non bornée
+      F : File_Type;
+      Nb : Natural := 0;
+      
+   begin
+      Put("Début du compte des facettes dans le fichier");
+      
+      -- Ouverture du fichier
+      Open(File => F, Mode => In_File, Name => Nom_Fichier);
+      -- On compte les facettes en trouvant les "endloop"
+      while not(End_Of_File(F)) loop
+	 Ligne := U(Get_Line(F));
+	 if Dans_Chaine(Enleve_Espaces(Ligne), "endloop") then --on vire les espaces en préfixe pour accélérer la recherche
+	    Nb := Nb +1;
+	 end if;
+      end loop;
+      
+      Close(F); -- Fermeture du fichier
+      return Nb;
+   end Nombre_Facettes;
+      
+   function Chargement_ASCII(Nom_Fichier : String) return Maillage is
+      
+      -- #### Fonctions utilisées par chargement_ASCII ####
+      
+      -- A partir de la ligne d'un vecteur, récupère les 3 valeurs
+      function Parser_Vecteur(Ligne : in Ustring) return Vecteur is
+	 
+	 -- Transforme une chaine en nombre dépendent du type du nombre
+	 function Chaine_Vers_Float(Chaine_Nombre: in String) return Float is
+	    
+	 begin
+	    	    
+	    if Dans_Chaine(U(Chaine_Nombre), "e") then 
+	       -- si flottant format scientifique
+	       if Chaine_Nombre(Chaine_Nombre'Length - 2) = '+' then
+		  return Float'Value(Chaine_Nombre(1..Chaine_Nombre'Length - 4)) * Float(10**Integer'Value(Chaine_Nombre(Chaine_Nombre'Length - 2..Chaine_Nombre'Length)));
+	       else
+		  return Float'Value(Chaine_Nombre(1..Chaine_Nombre'Length - 4)) * Float(10**( - Integer'Value(Chaine_Nombre(Chaine_Nombre'Length - 2..Chaine_Nombre'Length))));
+	       end if;
+	    else
+	       --entier ou float normal 
+	       return Float'Value(Chaine_Nombre); --conversion en float
+	    end if;
+	    
+	 end Chaine_Vers_Float;
+	 
+	 
+	 type Etat is (Hors_Nombre, Dans_Nombre) ;
+	 
+	 	 Chaine_Tampon : Ustring;
+	 EtatCour : Etat := Hors_Nombre;
+	 --indique le point courant au fur et a mesure de la lecture
+	 Pt_Courant : Natural := 1; 
+	 type Bornes_Point is record
+	    Debut, Fin : Natural;
+	 end record;
+	 
+	 --indique les bornes de l'écriture des pts dans la chaine
+	 Pt_Bornes: array(1..3) of Bornes_Point; 
+	     
+	 Vecteur_Reponse : Vecteur(1..3);
+	 
+      begin
+	 -- On enlève les espaces et le mot "vertex
+	 Chaine_Tampon := Enleve_Espaces(Ligne);
+	 Chaine_Tampon := U(Slice(Chaine_Tampon,7,Length(Chaine_Tampon)));
+	 Chaine_Tampon := Enleve_Espaces(Chaine_Tampon);
+	 
+	 for I in 1..(Length(Chaine_Tampon)) loop
+	    	    
+	    if Element(Chaine_Tampon, I) = ' ' then
+	       if EtatCour = Dans_Nombre then
+		  Pt_Bornes(Pt_Courant).Fin := I - 1;
+		  EtatCour := Hors_Nombre;
+		  Pt_Courant := Pt_Courant + 1;
+	       end if;
+	    else --caractère normal (chiffre, lettre)
+	       if EtatCour = Hors_Nombre then
+		  Pt_Bornes(Pt_Courant).Debut := I;
+		  EtatCour := Dans_Nombre;
+	       end if;
+	    end if;
 	    
 	 end loop;
 	 
@@ -194,7 +231,8 @@ end;
 		  Vecteur_Courant := 1; --on RàZ le compteur
 		  M.all(Facette_Courante) := Facette_Tampon; --On copie la facette courante dans le maillage à retourner
 		  Facette_Courante := Facette_Courante + 1; -- On incrémente la facette courante pour la prochaine
-		  EtatCourant := Dans_Facette; --on sort de la boucle interne à une facette		  
+		  EtatCourant := Dans_Facette; --on sort de la boucle interne à une facette
+		  
 	       end if;
 	       	       
 	 end case;
