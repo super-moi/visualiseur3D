@@ -2,6 +2,7 @@ with Dessin; use Dessin;
 with Ligne; use Ligne;
 with STL ; use STL;
 with Algebre ; use Algebre;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Scene;
 
@@ -15,6 +16,9 @@ package body Frame is
       function Vers_Vecteur_Entier(Vect_Float : Vecteur) return Vecteur_Entier is
 	-- Resultat : Vecteur_Entier;
       begin
+	 Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(1)))));
+	 Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(2)))));
+	 
 	 return (1 => Integer(Float'Rounding(Vect_Float(1))),2 => Integer(Float'Rounding(Vect_Float(2)))); 
       end;
       
@@ -24,10 +28,14 @@ package body Frame is
       Vect1, Vect2, Vect3 : Vecteur(1..2);
    begin
             
-      -- a faire : calcul des projections, affichage des triangles
-      -- il commencer par remettre a zero l'affichage
-      
-      -- projection
+      --Remise à 0 des projections
+      for I in 1..SCRW loop
+	 for J in 1..SCRH loop
+	    Fixe_Pixel(I,J, 0);
+	 end loop;
+      end loop;
+            
+      -- projection de chaque chaque facette, puis affichage à l'écran
       for I in 1..Scene.Nombre_De_Facettes loop
 	 Scene.Projection_Facette(I, Vect1, Vect2, Vect3);
 	 V1 := Vers_Vecteur_Entier(Vect1); 

@@ -69,17 +69,31 @@ package body Scene is
 	
 	
 	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
-	begin	 
-	   -- index designe l'action voulu sur la camera
-	   if Index=1 then 
-	      R:=R + Increment;   
-	   elsif Index=3 then 
+	   procedure Indique_Mouvement(Index : Positive; Mouvement : Float) is
+	   begin
+	      case Index is
+		 when 1 => Put_Line("Zoom de " & Float'Image(Mouvement));
+		 when 2 => Put_Line("Rotation autour de Ox de " & Float'Image(Mouvement));
+		 when 3 => Put_Line("Rotation autour de Oy de " & Float'Image(Mouvement));
+		 when 4 => Put_Line("Rotation autour de Oz de " & Float'Image(Mouvement));
+		 when others => null;
+	      end case;
+	   end;
+
+	 begin	 
+	    -- index designe l'action voulu sur la camera
+	    Indique_Mouvement(Index, Increment);
+	    if Index=1 then 
+	       R:=R + Increment; 
+	   elsif Index=4 then 
 	      Phi:= Phi + Increment; --en radian	       
 	   elsif Index=2 then
 	      Rho:= Rho + Increment;	      
-	   elsif Index=4 then 
-	      R:= R + Increment;    
+	   elsif Index=3 then 
+	      Theta:= Theta + Increment;    
 	   end if;
+	   
+	   Modification_Matrice_Rotation;
 	   
 	end Modification_Coordonnee_Camera;
 	
