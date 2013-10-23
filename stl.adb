@@ -58,7 +58,7 @@ package body STL is
       Nb : Natural := 0;
       
    begin
-      Put("Début du compte des facettes dans le fichier");
+      Put_Line("Début du compte des facettes dans le fichier..");
       
       -- Ouverture du fichier
       Open(File => F, Mode => In_File, Name => Nom_Fichier);
@@ -173,10 +173,11 @@ package body STL is
       Facette_Tampon : Facette;
       
    begin
+      
       Put_Line("Début de la récupération des données du fichier STL");
       Nb_Facettes := Nombre_Facettes(Nom_Fichier);
-      Put(Nb_Facettes);
-      Put_line(" facettes détectées dans le fichier. Récupération des données initiée");
+      Put_line(Integer'Image(Nb_Facettes) & " facettes détectées dans le fichier. Récupération des données initiée");
+      
       -- une fois qu'on a le nombre de facettes on connait la taille du maillage
       M := new Tableau_Facette(1..Nb_Facettes);
       
@@ -240,6 +241,7 @@ package body STL is
       end loop;
       
       Close (F); --fermeture du fichier
+      Put_Line("Fin de la récupération des données du fichier STL " & Nom_Fichier);
       return M;
    end Chargement_ASCII;
    

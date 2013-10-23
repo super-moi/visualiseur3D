@@ -1,8 +1,8 @@
 with Ada.Numerics.Elementary_Functions;
 use Ada.Numerics.Elementary_Functions;
-with Ada.Text_IO;
-use Ada.Text_IO;
-
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 
 
 package body Scene is
@@ -38,12 +38,14 @@ package body Scene is
 	
 
 	procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur) is
+	   	   	   
 	begin
-	   
+	  -- Put(Index_Facette);
+	   	   
 	   -- index_facette designe la facette selectionnee
 	   P1 := Projection(M(Index_Facette).P1, Position_Camera, E, T); 
-	   P2 := Projection(M(Index_Facette).P2, Position_Camera, E , T); 
-	   P3 := Projection(M(Index_Facette).P3, Position_Camera, E , T); 
+	   P2 := Projection(M(Index_Facette).P2, Position_Camera, E, T); 
+	   P3 := Projection(M(Index_Facette).P3, Position_Camera, E, T); 
 	   
 	end Projection_Facette;
 	
@@ -53,7 +55,9 @@ package body Scene is
 	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.
 	   -- Pour l'instant je copie TOUT le contenu du tableau, pas juste le pointeur. On verra ce que ca donne dans le reste, sinon on fait
 	   -- M := M_Param
-	  	 	      	   
+	   
+	   M := new Tableau_Facette(Maillage_Param'Range);
+	   
 	   M.all := Maillage_Param.all;    	   
 	   
 	end;
