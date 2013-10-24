@@ -6,6 +6,8 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Scene;
 
+
+
 package body Frame is
    
       procedure Calcul_Image is
@@ -16,8 +18,8 @@ package body Frame is
       function Vers_Vecteur_Entier(Vect_Float : Vecteur) return Vecteur_Entier is
 	-- Resultat : Vecteur_Entier;
       begin
-	 Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(1)))));
-	 Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(2)))));
+	 --Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(1)))));
+	 --Put_line(Integer'Image(Integer(Float'Rounding(Vect_Float(2)))));
 	 
 	 return (1 => Integer(Float'Rounding(Vect_Float(1))),2 => Integer(Float'Rounding(Vect_Float(2)))); 
       end;
@@ -34,8 +36,11 @@ package body Frame is
 	    Fixe_Pixel(I,J, 0);
 	 end loop;
       end loop;
-            
+      
+   
+      Trace_Pixel(400,300);
       -- projection de chaque chaque facette, puis affichage à l'écran
+      
       for I in 1..Scene.Nombre_De_Facettes loop
 	 Scene.Projection_Facette(I, Vect1, Vect2, Vect3);
 	 V1 := Vers_Vecteur_Entier(Vect1); 

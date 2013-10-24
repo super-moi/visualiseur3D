@@ -1,6 +1,8 @@
 
 with Ada.Numerics.Elementary_Functions;
 use Ada.Numerics.Elementary_Functions;
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 package body Algebre is
 
@@ -9,11 +11,15 @@ package body Algebre is
       Rotation : Matrice(1..3, 1..3);
    begin
       -- a faire --fait
-       Rotation:= (
-		   (cos(Angles(2))*cos(Angles(3)),sin(-Angles(1))*sin(-Angles(2))*cos(Angles(3))-Cos(Angles(1))*sin(-Angles(3)),sin(-Angles(1))*sin(-Angles(3))+cos(Angles(1))*sin(-Angles(2))*cos(Angles(3))),
-		  (cos(Angles(2))*sin(-Angles(3)),sin(-Angles(1))*sin(-Angles(2))*sin(-Angles(3))+cos(Angles(1))*cos(Angles(3)),cos(Angles(1))*sin(-Angles(2))*sin(-Angles(3))-Sin(-Angles(1))*cos(Angles(3))),
-		  (-sin(-Angles(2)),sin(-Angles(1))*cos(Angles(2)),cos(Angles(1))*cos(Angles(2)))
-		 );     
+        Rotation:= (
+		   (cos(angles(3))*cos(angles(2)), sin(angles(3))*cos(angles(1))+cos(angles(3))*sin(angles(2))*sin(angles(1)), sin(angles(3))*sin(angles(1))-cos(angles(3))*sin(angles(2))*cos(angles(1))),
+		  (-sin(angles(3))*cos(angles(2)), cos(angles(3))*cos(angles(1))-sin(angles(1))*sin(angles(3))*sin(angles(2)), cos(angles(3))*sin(angles(1))+cos(angles(1))*sin(angles(3))*sin(angles(2))),
+		  (sin(angles(2)), -cos(angles(2))*sin(angles(1)), cos(angles(2))*cos(angles(1)))
+		  );   
+       
+       
+       
+       
      return Rotation;
    end;
 
@@ -22,11 +28,13 @@ package body Algebre is
    begin
       -- a faire  --fait
       --3rotation a faire: rho, theta, phi
+         
       Rotation:= (
-		  (cos(Angles(2))*cos(Angles(3)),sin(Angles(1))*sin(Angles(2))*cos(Angles(3))-cos(Angles(1))*sin(Angles(3)),sin(Angles(1))*sin(Angles(3))+cos(Angles(1))*sin(Angles(2))*cos(Angles(3))),
-		  (cos(Angles(2))*sin(Angles(3)),sin(Angles(1))*sin(Angles(2))*sin(Angles(3))+cos(Angles(1))*cos(Angles(3)),cos(Angles(1))*sin(Angles(2))*sin(Angles(3))-sin(Angles(1))*cos(Angles(3))),
-		  (-sin(Angles(2)),sin(Angles(1))*cos(Angles(2)),cos(Angles(1))*cos(Angles(2)))
-		 );       
+		  (Cos(Angles(2))*Cos(Angles(3)), Cos(Angles(2))*Sin(Angles(3)), -Sin(Angles(2))),
+		  (Sin(Angles(1))*Sin(Angles(2))*Cos(Angles(3))-Cos(Angles(1))*Sin(Angles(3)),Sin(Angles(1))*Sin(Angles(2))*sin(Angles(3))+Cos(Angles(1))*Cos(Angles(3)), Sin(Angles(1))*cos(Angles(2))),
+		  (Cos(Angles(1))*Sin(Angles(2))*Cos(Angles(3))+Sin(Angles(1))*Sin(Angles(3)), Cos(Angles(1))*Sin(Angles(2))*sin(Angles(3))-Sin(Angles(1))*Cos(Angles(3)), Cos(Angles(1))*Cos(Angles(2)))
+				     );
+      
       return Rotation;
    end;
 
@@ -35,7 +43,7 @@ package body Algebre is
    begin
       --a faire --fait
       for I in 1..3 loop
-	 Z  (I) := Y(1) * X(1,I) + Y(2) * X(2,I) + Y(3)*X(3,I);
+	 Z  (I) := Y(1) * X(I,1) + Y(2) * X(I,2) + Y(3)*X(I,3);
       end loop;
 	         
       return Z;
@@ -44,7 +52,7 @@ package body Algebre is
 
    function Projection(A, C, E : Vecteur ; T : Matrice) return Vecteur is
       Resultat : Vecteur(1..2);
-      B : Vecteur(1..3);
+      D : Vecteur(1..3);
    begin
       -- a faire --fait
       -- 1) deplacer l'origine (avec E?)
@@ -57,16 +65,19 @@ package body Algebre is
 	   
       --1)
       for I in 1..3 loop
-	 B(I):= A(I) - C(I);
+	 D(I):= A(I) - C(I);	 
       end loop;
+     
       
       --2)
-      B:="*"(T,B);
+      D:="*"(T,D);
       
       --3)
-      Resultat(1):= (E(3) / B(3)) * B(1) - E(1);
-      Resultat(2):= (E(3) / B(3))* B(2) - E(2);
+      Resultat(1):= (E(3) / D(3)) * D(1) - E(1);
+      Resultat(2):= (E(3) / D(3))* D(2) - E(2);
       
+      
+            
       return Resultat;
    end;
 

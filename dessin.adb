@@ -22,7 +22,10 @@ package body Dessin is
 
 	procedure Trace_Pixel(X : Pixel_X ; Y : Pixel_Y) is
 	begin
-		Fixe_Pixel(X, Y, 255);
+	  
+	      Fixe_Pixel(X, Y, 255);
+	   
+	   
 	end;
 
 end;

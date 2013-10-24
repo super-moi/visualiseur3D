@@ -1,0 +1,77 @@
+V "GNAT Lib v4.6"
+A -fstack-check=specific
+A -gnatA
+A -g
+A -gnato
+A -g
+A -gnat95
+A -mtune=generic
+A -march=x86-64
+P ZX
+R nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnvnnvnnnnnnnnnnnnnnnnnn
+
+U dessin%b		dessin.adb		bbd3b565 NE OO PK
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+
+U dessin%s		dessin.ads		cae0225e EE NE OO PK
+W sdl%s			sdl.ads			sdl.ali
+W sdl.types%s		sdl-types.adb		sdl-types.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-unccon.ads		20070406091342 f9eb8f06
+D dessin.ads		20131007071405 0ac93c23
+D dessin.adb		20131024072359 3186b182
+D interfac.ads		20090409150019 f77d8799
+D i-c.ads		20101007125900 809c38c4
+D i-cexten.ads		20101019103052 1e6d46de
+D i-cpoint.ads		20090409150019 3d5a7107
+D i-cstrin.ads		20090417131547 f3023ec4
+D sdl.ads		20120716195233 7d09e326
+D sdl-types.ads		20120718220818 c0291e7d
+D system.ads		20130419124036 23e1f70b
+D s-atacco.ads		20090409150019 1dc856ad
+D s-exctab.ads		20090417131547 66e51330
+D s-parame.ads		20091130110856 9c5d83fa
+D s-stalib.ads		20101021102512 c4241c00
+D uintn_ptrops.ads	20120711133633 ccf84010
+X 3 dessin.ads
+4K9*Dessin 18e4 4|7b14 31t4
+6N9*SCRW 8r45
+7N9*SCRH 9r45
+8I17*Pixel_X{integer} 15r34 16r35 4|15r34 23r35
+9I17*Pixel_Y{integer} 15r48 16r49 4|15r48 23r49
+12p9*Pixels{13|59P9[11|58]} 4|18r48
+13i9*Pitch{natural} 4|19r66
+15U19*Fixe_Pixel 15>30 15>44 15>58 4|15b19 21l13 21t23 26s15
+15i30 X{8I17} 4|15b30 19r54
+15i44 Y{9I17} 4|15b44 19r61
+15m58 Valeur{11|52M9} 4|15b58 20r58
+16U19*Trace_Pixel 16>31 16>45 4|23b19 29t12
+16i31 X{8I17} 4|23b31 26r26
+16i45 Y{9I17} 4|23b45 26r29
+X 4 dessin.adb
+8K18 C=8:40 13r18 19r36 19r48
+16p17 Pointy{17|48P12[11|64]} 18m17 19m17 19r27 20r43
+X 5 interfac.ads
+36K9*Interfaces 4|1r6 8r29 12r13 5|171e15
+X 6 i-c.ads
+18K20*C 4|1w17 8r40 6|230e17
+35I9*int<integer> 4|13r20 19r50
+47M9*unsigned_char
+56I9*ptrdiff_t<long_integer> 4|19r38
+X 8 i-cpoint.ads
+45P9*Pointer(11|52M9)
+X 10 sdl.ads
+44K9*SDL 3|2r6 2r21 10|103e8
+X 11 sdl-types.ads
+41K13*Types 3|2w10 2r25 11|228e14
+52M9*Uint8<6|47M9> 3|15r67 4|15r67
+58K12*Uint8_Ptrs[13|39] 3|12r18 4|10r13 20r17
+64K12*Uint8_PtrOps[17|38] 4|11r13 16r26 18r27
+X 13 s-atacco.ads
+59P9*Object_Pointer(11|52M9) 3|12r29[11|58] 4|20r28[11|58]
+X 17 uintn_ptrops.ads
+48P12*Pointer{8|45P9[41[11|64]]} 4|16r39[11|64] 18r40[11|64]
+64V13*"+"=65:26{8|45P9[41[11|64]]} 4|19s34[11|64]
+
