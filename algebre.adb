@@ -43,7 +43,7 @@ package body Algebre is
    begin
       --a faire --fait
       for I in 1..3 loop
-	 Z  (I) := Y(1) * X(I,1) + Y(2) * X(I,2) + Y(3)*X(I,3);
+	 Z  (I) := Y(1) * X(I,1) + Y(2) * X(I,2) + Y(3) * X(I,3);
       end loop;
 	         
       return Z;
@@ -74,7 +74,7 @@ package body Algebre is
       
       --3)
       Resultat(1):= (E(3) / D(3)) * D(1) - E(1);
-      Resultat(2):= (E(3) / D(3))* D(2) - E(2);
+      Resultat(2):= (E(3) / D(3)) * D(2) - E(2);
       
       
             

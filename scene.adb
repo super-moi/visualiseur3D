@@ -27,7 +27,7 @@ package body Scene is
 	procedure Modification_Matrice_Rotation_Inv is
 	begin
 	   
-	   T := Matrice_Rotations_inverses ((1 => -Rho, 2 => -Theta, 3 => -Phi));
+	   T := Matrice_Rotations_inverses ((1 => Rho, 2 => Theta, 3 => Phi));
 	   
 	end Modification_Matrice_Rotation_inv;
 	
@@ -40,13 +40,14 @@ package body Scene is
 	   Modification_Matrice_Rotation;
 	   Position := (0.0, 0.0, -R);
 	   Position := "*"( T, Position);
+	   
 	   New_Line;
+	  -- New_Line;
+	   --Put(Float'Rounding(Position(1)));
 	   New_Line;
-	   Put(Float'Rounding(Position(1)));
-	   New_Line;
-	   Put(Float'Rounding(Position(2))); 
-	   New_Line;
-	   Put(Float'Rounding(Position(3)));
+	   --Put(Float'Rounding(Position(2))); 
+	   --New_Line;
+	   --Put(Float'Rounding(Position(3)));
 	   return Position;
 	end;
 	
@@ -56,12 +57,13 @@ package body Scene is
 	begin
 	  --Put(Index_Facette);
 	  -- index_facette designe la facette selectionnee
-	   Modification_Matrice_Rotation_Inv;
 	   Cam:=Position_Camera;
+	   Modification_Matrice_Rotation_Inv;
+	   
 	   P3 := Projection(M(Index_Facette).P3,Cam, E, T); 
 	   P2 := Projection(M(Index_Facette).P2, Cam, E, T); 
 	   P1 := Projection(M(Index_Facette).P1, Cam, E, T); 
-	   
+	   Put(P1(2));
 	end Projection_Facette;
 	
 	
