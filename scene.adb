@@ -1,9 +1,5 @@
 with Ada.Numerics.Elementary_Functions;
 use Ada.Numerics.Elementary_Functions;
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-with Ada.Float_Text_IO; use Ada.Float_Text_IO;
-
 
 package body Scene is
 
@@ -35,19 +31,13 @@ package body Scene is
 	function Position_Camera return Vecteur is
 		Position : Vecteur(1..3);
 	begin
-	   -- a faire
-	   -- au depart, point camera en (0,0,-R) (R>0)
+	  
+	   -- au depart, point camera en (0,0,-R)
+	   -- puis on effectue une rotation
 	   Modification_Matrice_Rotation;
 	   Position := (0.0, 0.0, -R);
 	   Position := "*"( T, Position);
-	   
-	   New_Line;
-	  -- New_Line;
-	   --Put(Float'Rounding(Position(1)));
-	   New_Line;
-	   --Put(Float'Rounding(Position(2))); 
-	   --New_Line;
-	   --Put(Float'Rounding(Position(3)));
+	  
 	   return Position;
 	end;
 	
@@ -55,15 +45,17 @@ package body Scene is
 	procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur) is
 	   Cam : Vecteur(1..3);  
 	begin
-	  --Put(Index_Facette);
+	  
 	  -- index_facette designe la facette selectionnee
-	   Cam:=Position_Camera;
-	   Modification_Matrice_Rotation_Inv;
+	   Cam:=Position_Camera; -- on charge la position de la camera
+	   Modification_Matrice_Rotation_Inv;-- permet de rechager une matrice de rotation inverse
+					     --l'objet restera au centre de l'ecran
 	   
 	   P3 := Projection(M(Index_Facette).P3,Cam, E, T); 
 	   P2 := Projection(M(Index_Facette).P2, Cam, E, T); 
 	   P1 := Projection(M(Index_Facette).P1, Cam, E, T); 
-	   Put(P1(2));
+	   
+	   
 	end Projection_Facette;
 	
 	
@@ -86,27 +78,25 @@ package body Scene is
 	
 	
 	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
-	   procedure Indique_Mouvement(Index : Positive; Mouvement : Float) is
-	   begin
-	      case Index is
-		 when 1 => Put_Line("Zoom de " & Float'Image(Mouvement));
-		 when 2 => Put_Line("Rotation autour de Ox de " & Float'Image(Mouvement));
-		 when 3 => Put_Line("Rotation autour de Oy de " & Float'Image(Mouvement));
-		 when 4 => Put_Line("Rotation autour de Oz de " & Float'Image(Mouvement));
-		 when others => null;
-	      end case;
+	  -- procedure Indique_Mouvement(Index : Positive; Mouvement : Float) is
+	   --begin
+	     -- case Index is
+	--	 when 1 => Put_Line("Zoom de " & Float'Image(Mouvement));
+	--	 when 2 => Put_Line("Rotation autour de Ox de " & Float'Image(Mouvement));
+	--	 when 3 => Put_Line("Rotation autour de Oy de " & Float'Image(Mouvement));
+	--	 when 4 => Put_Line("Rotation autour de Oz de " & Float'Image(Mouvement));
+	--	 when others => null;
+	  --    end case;
 	      
-	   end;
+	  -- end;
 
-	 begin	 
-	    -- index designe l'action voulu sur la camera
-	    indique_Mouvement(Index, Increment);
-	    
-	 
-	    if Index=1 then 
+	begin	 
+	   -- index designe l'action voulu sur la camera
+	    	 
+	   if Index=1 then 
 	       R:=R + Increment; 
 	   elsif Index=4 then 
-	      Phi:= Phi + Increment; --en radian	       
+	      Phi:= Phi + Increment;	       
 	   elsif Index=2 then
 	      Rho:= Rho + Increment;	      
 	   elsif Index=3 then 
