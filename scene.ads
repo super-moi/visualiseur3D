@@ -18,7 +18,7 @@ package Scene is
    -- Projection_Facette prend en entree un numero de facette (Index_Facette)
    -- et renvoie les coordonnees 2D des projections des 3 points de
    -- la facette correspondante
-   procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur);
+   procedure Projection_Facette(Index_Facette : Positive ; P1, P2, P3 : out Vecteur; DansCadre1, DansCadre2, DansCadre3 : out Boolean);
    
    -- quelques procedures permettant de mettre a jour les objets :
    
