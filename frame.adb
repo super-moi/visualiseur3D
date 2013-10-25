@@ -9,27 +9,20 @@ with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 package body Frame is
    
-      procedure Calcul_Image is
+   procedure Calcul_Image is
       
-      type Vecteur_Entier is array(1..2) of Natural;
+      type Vecteur_Entier is array(1..2) of Integer;
       
       --Prend un vecteur en float, le renvoie en vecteur_entier
       function Vers_Vecteur_Entier(Vect_Float : Vecteur) return Vecteur_Entier is
       begin  
-	 return (1 => Integer(Float'Rounding(Vect_Float(1))),2 => Integer(Float'Rounding(Vect_Float(2)))); 
+	 return (1 => Integer(Float'Rounding(Vect_Float(1))), 2 => Integer(Float'Rounding(Vect_Float(2)))); 
       end;
       
       --vérifie si le vecteur projeté est bien dans le cadre de l'écran
       function Est_Dans_Cadre(Vecteur_Projection : Vecteur_Entier) return Boolean is
       begin
 	 return (Vecteur_Projection(1) > 0 and Vecteur_Projection(1) < SCRW) and (Vecteur_Projection(2) > 0 and Vecteur_Projection(2) < SCRH);
-      end;
-      
-      procedure Print_Vector(Vector : Vecteur_Entier) is
-      begin
-	 for I in 1..2 loop
-	    Put(Vector(I));
-	 end loop;
       end;
       
       -- Garde l'info qui indique si un point est tracable ou non
@@ -65,8 +58,6 @@ package body Frame is
 	 Est_Tracable_V1 := Est_Tracable_V1 and Est_Dans_Cadre(V1);
 	 Est_Tracable_V2 := Est_Tracable_V2 and Est_Dans_Cadre(V2);
 	 Est_Tracable_V3 := Est_Tracable_V3 and Est_Dans_Cadre(V3);
-	 
-	 -- Print_Vector(V1); Print_Vector(V2); Print_Vector(V3);
 	 
 	 -- Si les points sont dans le cadre, on trace d'arête
 	 if Est_Tracable_V1 and Est_Tracable_V2 then
