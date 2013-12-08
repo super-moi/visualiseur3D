@@ -6,12 +6,13 @@ with Algebre ; use Algebre;
 with Scene;
 
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-
+with Ada.float_Text_IO; use Ada.Float_Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 package body Frame is
    
    procedure Calcul_Image is
       
-      type Vecteur_Entier is array(1..2) of Integer;
+      type Vecteur_Entier is array(1..2) of Integer;           
       
       --Prend un vecteur en float, le renvoie en vecteur_entier
       function Vers_Vecteur_Entier(Vect_Float : Vecteur) return Vecteur_Entier is

@@ -7,7 +7,7 @@ with Algebre ; use Algebre;
 
 package Scene is
    -- quelques fonctions et procedures permettant d'acceder aux objets :
-  
+   
    -- Position_Camera renvoie les coordonnees courantes
    -- de la camera
    function Position_Camera return Vecteur;

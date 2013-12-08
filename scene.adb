@@ -12,7 +12,13 @@ package body Scene is
 	T : Matrice(1..3, 1..3); -- matrice de rotation
 
 	M : Maillage;
-
+	
+	function Retour_Maillage return Maillage is
+	begin
+	   return M;
+	end;
+	
+	
 	procedure Modification_Matrice_Rotation is
 	begin
 	   
@@ -81,10 +87,8 @@ package body Scene is
 	
 	procedure Ajout_Maillage(Maillage_Param : Maillage) is
 	begin
-	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.
-	   -- Pour l'instant je copie TOUT le contenu du tableau, pas juste le pointeur. On verra ce que ca donne dans le reste, sinon on fait
-	   -- M := M_Param
-	   
+	   -- Explication : cette proc est appellée par visualiseur.adb, et ce module appelle *déjà* chargement_ASCII. On a juste a copier le paramètre en mémoire.sd	  
+
 	   M := new Tableau_Facette(Maillage_Param'Range);
 	   
 	   M.all := Maillage_Param.all;    	   
@@ -98,18 +102,7 @@ package body Scene is
 	
 	
 	procedure Modification_Coordonnee_Camera(Index : Positive ; Increment : Float) is
-	  -- procedure Indique_Mouvement(Index : Positive; Mouvement : Float) is
-	   --begin
-	     -- case Index is
-	--	 when 1 => Put_Line("Zoom de " & Float'Image(Mouvement));
-	--	 when 2 => Put_Line("Rotation autour de Ox de " & Float'Image(Mouvement));
-	--	 when 3 => Put_Line("Rotation autour de Oy de " & Float'Image(Mouvement));
-	--	 when 4 => Put_Line("Rotation autour de Oz de " & Float'Image(Mouvement));
-	--	 when others => null;
-	  --    end case;
-	      
-	  -- end;
-
+	  
 	begin	 
 	   -- index designe l'action voulue sur la camera
 	    	 
