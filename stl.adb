@@ -145,7 +145,7 @@ package body STL is
 	 end if;
 	 
 	 for I in 1..3 loop
-	    Vecteur_Reponse(I) := Chaine_Vers_Float(Slice(Chaine_Tampon, Pt_Bornes(I).Debut, Pt_Bornes(I).Fin));
+	    Vecteur_Reponse(I) := Float'Value(Slice(Chaine_Tampon, Pt_Bornes(I).Debut, Pt_Bornes(I).Fin));
 	 end loop;
 	 
 	 return Vecteur_Reponse;
